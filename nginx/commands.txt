@@ -1,0 +1,11 @@
+docker build -t websocket-server:1.0 .
+docker-compose up -d
+docker-compose down
+
+
+docker run --name websocket-server -d -p 8001:8010 websocket-server:1.0
+docker exec -it websocket-server /bin/bash
+
+
+        ws server - load balancer - ws client
+port       8010          8020

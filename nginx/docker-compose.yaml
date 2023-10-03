@@ -2,12 +2,12 @@ version: '3'
 
 services:
   websocket-server1:
-    image: ws-server:1.0
+    image: websocket-server:1.0
     container_name: ws_server_1
     hostname: ws_server_1
 
   websocket-server2:
-    image: ws-server:1.0
+    image: websocket-server:1.0
     container_name: ws_server_2
     hostname: ws_server_2
 

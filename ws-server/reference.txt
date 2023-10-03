@@ -1,0 +1,4 @@
+https://www.youtube.com/watch?v=v81CzSeiQjo
+https://websockets.readthedocs.io/
+https://www.nginx.com/blog/websocket-nginx/ 
+https://www.wallarm.com/what/a-simple-explanation-of-what-a-websocket-is

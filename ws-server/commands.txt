@@ -1,0 +1,29 @@
+Server:
+docker build -t websocket-server:1.0 .
+docker login -u himjain
+docker tag websocket-serve:1.0 himjain/websocket-serve:1.0
+docker push himjain/websocket-serve:1.0
+
+k apply -f manifest.yaml
+
+Output: wss://websocket-server-alb.himajai2-32.test.thunderhead.io:443
+
+
+
+
+Client:
+rm -rf report
+jmeter -n -t client.jmx -l report/report.jtl -e -o report 
+
+sh /Users/himajai2/Documents/Dev/projects/websocket/apache-jmeter-5.6.2/bin/jmeter.sh -n -t /Users/himajai2/Documents/Dev/projects/websocket/client.jmx -l /Users/himajai2/Documents/Dev/projects/websocket/report.csv -e -o /Users/himajai2/Documents/Dev/projects/websocket/report
+
+Other Commands:
+k logs -l app=istio-ingressgateway-alb -n istio-system -f
+k logs -l app=websocket-server -n pf -f
+
+
+
+Flow:
+ws server - alb - ws client
+
+

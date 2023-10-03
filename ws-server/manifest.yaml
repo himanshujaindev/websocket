@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: websocket-server
+  namespace: pf
+  labels:
+    app: websocket-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: websocket-server
+  template:
+    metadata:
+      labels:
+        app: websocket-server
+    spec:
+      containers:
+      - name: websocket-server
+        image: himjain/websocket-server:1.0
+        ports:
+        - containerPort: 8010
+          protocol: TCP
+        resources:
+          requests:
+            memory: "256Mi" 
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "200m"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: websocket-server
+  namespace: pf
+  labels:
+    app: websocket-server
+spec:
+  selector:
+    app: websocket-server
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8010
+      targetPort: 8010
+  type: ClusterIP
+
+---
+
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: websocket-server-alb-vs
+  namespace: pf
+spec:
+  gateways:
+  - istio-system/default-gateway-alb
+  hosts:
+  - websocket-server-alb.himajai2-32.test.thunderhead.io
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: websocket-server.pf.svc.cluster.local
+        port:
+          number: 8010
+
+---

@@ -1,0 +1,18 @@
+#!/bin/bash
+# Pre-requisite: jmeter, ws plugin
+# jmeter = https://jmeter.apache.org/download_jmeter.cgi
+# ws plugin = https://bitbucket.org/pjtr/jmeter-websocket-samplers/downloads/
+
+rm -rf /Users/himajai2/Documents/Dev/projects/websocket/report
+rm /Users/himajai2/Documents/Dev/projects/websocket/report.csv
+
+sh /Users/himajai2/Documents/Dev/projects/websocket/apache-jmeter-5.6.2/bin/jmeter.sh \
+	-n -t /Users/himajai2/Documents/Dev/projects/websocket/client.jmx \
+    -l /Users/himajai2/Documents/Dev/projects/websocket/report.csv \
+    -e -o /Users/himajai2/Documents/Dev/projects/websocket/report \
+    -J noOfThreads=${noOfThreads} \
+    -J loadDuration=${loadDuration} \
+    -J host=${host} \
+    -J port=${port}
+
+# Report settings: https://stackoverflow.com/questions/35783964/jenkins-html-publisher-plugin-no-css-is-displayed-when-report-is-viewed-in-j

@@ -1,0 +1,29 @@
+docker build -t ping:1.0 .
+docker run --name ping -d -p 5000:5000 himjain/ping:1.0
+docker logs ping -f
+
+docker login -u himjain
+docker tag ping:1.0 himjain/ping:1.0
+docker push himjain/ping:1.0
+
+
+k get deploy -n pf
+k logs ping-6c97ccb6b-g6jqh -n pf -f
+k exec ping-6c97ccb6b-g6jqh -n pf -it -- bash
+k apply -f ping/manifest.yaml
+
+
+k logs -l app=istio-ingressgateway-alb -n istio-system --tail 10 -f
+k logs websocket-server-6cc779c6cc-b5895 -c istio-proxy -n pf --tail 10 -f
+
+apt update
+apt install curl
+
+
+From ccbu-example-chart
+bash-5.1# curl ping.pf/ping
+bash-5.1# curl ping.pf.svc.cluster.local/ping
+
+
+{"response_code_details":"via_upstream","downstream_remote_address":"173.39.121.74:56700","upstream_transport_failure_reason":null,"connection_termination_details":null,"method":"GET","bytes_received":0,"protocol":"HTTP/2","upstream_cluster":"outbound|8080||ccbu-example-chart.pf.svc.cluster.local","upstream_local_address":"10.3.174.222:47986","requested_server_name":"ccbu-example-chart.qaus1.ciscoccservice.com","upstream_host":"10.3.191.162:8080","route_name":null,"user_agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36","bytes_sent":284,"response_code":200,"start_time":"2023-09-27T16:09:46.385Z","upstream_service_time":"3","downstream_local_address":"10.3.136.177:443","path":"/","request_header_size":2420,"request_id":"dc612a20-57ab-4ed0-bb35-578f45a0e4ca","x_forwarded_for":"173.39.121.74","duration":3,"authority":"ccbu-example-chart.qaus1.ciscoccservice.com","response_flags":"-"}
+{"upstream_cluster":"outbound|8080||ccbu-example-chart.pf.svc.cluster.local","upstream_local_address":"10.3.174.222:47986","requested_server_name":"ccbu-example-chart.qaus1.ciscoccservice.com","upstream_transport_failure_reason":null,"authority":"ccbu-example-chart.qaus1.ciscoccservice.com","protocol":"HTTP/2","x_forwarded_for":"173.39.121.74","user_agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36","response_code_details":"via_upstream","start_time":"2023-09-27T16:09:46.871Z","downstream_remote_address":"173.39.121.74:56700","upstream_host":"10.3.191.162:8080","bytes_received":0,"method":"GET","route_name":null,"response_flags":"-","bytes_sent":284,"upstream_service_time":"1","path":"/favicon.ico","duration":1,"response_code":200,"request_header_size":2358,"request_id":"246af463-d6b9-44f9-80e4-54bccfa70d2d","connection_termination_details":null,"downstream_local_address":"10.3.136.177:443"}
